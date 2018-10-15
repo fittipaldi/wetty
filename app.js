@@ -55,7 +55,7 @@ if (opts.sshhost) {
 }
 
 if (opts.sshauth) {
-	sshauth = opts.sshauth
+    sshauth = opts.sshauth
 }
 
 if (opts.sshuser) {
@@ -69,7 +69,7 @@ if (opts.sslkey && opts.sslcert) {
     opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
 }
 
-process.on('uncaughtException', function(e) {
+process.on('uncaughtException', function (e) {
     console.error('Error: ' + e);
 });
 
@@ -79,66 +79,67 @@ var app = express();
 app.configure(function () {
     app.use(express.methodOverride());
     app.use(express.bodyParser());
-  	app.use(function(req, res, next) {
-	  console.log('Allowed Cross Domnain');
-	  res.header("Access-Control-Allow-Origin", "*");
-	  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	  next();
-	});
+    app.use(function (req, res, next) {
+        console.log('Allowed Cross Domnain');
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
     app.use(app.router);
 });
-
-app.get('/wetty/ssh/:user', function(req, res) {
-	forcessh = false;
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.get('/user/:user', function (req, res) {
+    forcessh = false;
     res.sendfile(__dirname + '/public/wetty/index.html');
 });
-app.use('/', express.static(path.join(__dirname, 'public')));
-
-app.get('/ssh/:user/:host', function(req, res) {
-	forcessh = true;
-	globalsshuser = req.params.user;
-	sshhost = req.params.host;
-	res.sendfile(__dirname + '/public/index.html');
+app.get('/', function (req, res) {
+    forcessh = false;
+    res.sendfile(__dirname + '/public/index.html');
 });
-app.get('/ssh/:user/:host/:port', function(req, res) {
-	forcessh = true;
-	sshport = req.params.port;
-	globalsshuser = req.params.user;
-	sshhost = req.params.host;
+app.get('/ssh/:user/:host', function (req, res) {
+    forcessh = true;
+    globalsshuser = req.params.user;
+    sshhost = req.params.host;
+    res.sendfile(__dirname + '/public/index.html');
+});
+app.get('/ssh/:user/:host/:port', function (req, res) {
+    forcessh = true;
+    sshport = req.params.port;
+    globalsshuser = req.params.user;
+    sshhost = req.params.host;
     res.sendfile(__dirname + '/public/index.html');
 });
 
-
 if (runhttps) {
-    httpserv = https.createServer(opts.ssl, app).listen(opts.port, function() {
+    httpserv = https.createServer(opts.ssl, app).listen(opts.port, function () {
         console.log('https on port ' + opts.port);
     });
 } else {
-    httpserv = http.createServer(app).listen(opts.port, function() {
+    httpserv = http.createServer(app).listen(opts.port, function () {
         console.log('http on port ' + opts.port);
     });
 }
 
-var io = server.listen(httpserv,{path: '/wetty/socket.io'});
-io.on('connection', function(socket){
-	var sshuser = '';
+var io = server.listen(httpserv, {path: '/wetty/socket.io'});
+io.on('connection', function (socket) {
+    var sshuser = '';
     var request = socket.request;
     console.log((new Date()) + ' Connection accepted.');
-    if (match = request.headers.referer.match('/wetty/ssh/.+$')) {
-        sshuser = match[0].replace('/wetty/ssh/', '') + '@';
+    if (match = request.headers.referer.match('/user/.+$')) {
+        sshuser = match[0].replace('/user/', '') + '@';
     } else if (globalsshuser) {
         sshuser = globalsshuser + '@';
     }
 
     var term;
-    if ((process.getuid() == 0) && !forcessh ) {
+    if ((process.getuid() == 0) && !forcessh) {
         term = pty.spawn('/usr/bin/env', ['login'], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
         });
-	}else if(forcessh){
-		term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport], {
+    } else if (forcessh) {
+        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
@@ -150,22 +151,22 @@ io.on('connection', function(socket){
             rows: 30
         });
     }
-	
+
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
-    term.on('data', function(data) {
-		console.log('Data:' + data);
+    term.on('data', function (data) {
+        //console.log('Data:' + data);
         socket.emit('output', data);
     });
-    term.on('exit', function(code) {
+    term.on('exit', function (code) {
         console.log((new Date()) + " PID=" + term.pid + " ENDED")
     });
-    socket.on('resize', function(data) {
+    socket.on('resize', function (data) {
         term.resize(data.col, data.row);
     });
-    socket.on('input', function(data) {
+    socket.on('input', function (data) {
         term.write(data);
     });
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
         term.end();
     });
 })
