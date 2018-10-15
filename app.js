@@ -89,9 +89,13 @@ app.configure(function () {
 });
 
 app.get('/wetty/ssh/:user', function(req, res) {
+	forcessh = false;
     res.sendfile(__dirname + '/public/wetty/index.html');
 });
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', function(req, res) {
+	forcessh = false;
+	express.static(path.join(__dirname, 'public'))
+});
 
 app.get('/ssh/:user/:host', function(req, res) {
 	forcessh = true;
@@ -152,6 +156,7 @@ io.on('connection', function(socket){
 	
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
     term.on('data', function(data) {
+		console.log('Data:' + data);
         socket.emit('output', data);
     });
     term.on('exit', function(code) {

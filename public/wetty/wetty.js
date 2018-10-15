@@ -1,6 +1,7 @@
 var term;
 var socket = io(location.origin, {path: '/wetty/socket.io'})
 var buf = '';
+var logCommand = '';
 
 //Allowed just from site
 /*
@@ -67,7 +68,8 @@ socket.on('output', function(data) {
     if (!term) {
         buf += data;
         return;
-    }	
+    }
+	logCommand += data;
     term.io.writeUTF16(data);
 });
 
