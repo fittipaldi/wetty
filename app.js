@@ -92,10 +92,7 @@ app.get('/wetty/ssh/:user', function(req, res) {
 	forcessh = false;
     res.sendfile(__dirname + '/public/wetty/index.html');
 });
-app.use('/', function(req, res) {
-	forcessh = false;
-	express.static(path.join(__dirname, 'public'))
-});
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.get('/ssh/:user/:host', function(req, res) {
 	forcessh = true;

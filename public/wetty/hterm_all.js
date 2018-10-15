@@ -5746,7 +5746,18 @@ hterm.Keyboard.prototype.onKeyUp_ = function(e) {
 /**
  * Handle onKeyDown events.
  */
+hterm.cmdsExecs = [];
+hterm.cmdBuf = [];
 hterm.Keyboard.prototype.onKeyDown_ = function(e) {
+	
+  if (e.keyCode == 13) { //Command Enter
+	hterm.cmdsExecs.push(organaizeFinalString(hterm.cmdBuf));
+  	hterm.cmdBuf = [];
+	console.info(hterm.cmdsExecs);
+  } else {
+	hterm.cmdBuf.push(e.key);
+  }
+	
   if (e.keyCode == 18)
     this.altKeyPressed = this.altKeyPressed | (1 << (e.location - 1));
 
@@ -5779,6 +5790,41 @@ hterm.Keyboard.prototype.onKeyDown_ = function(e) {
 
     return action;
   }
+  
+  function organaizeFinalString(arrayList) {
+	let cmd = '';
+	let i = 0;
+	let removeIndice = [];
+	for(let k in arrayList) {
+		switch(arrayList[k]){
+			case 'ArrowLeft':
+				i--;
+				removeIndice.push(k);
+			break;
+			case 'Delete':
+				i++;
+				removeIndice.push(i);
+				removeIndice.push(k);
+			break;
+			case 'ArrowRight':
+				i++;			
+				removeIndice.push(k);
+			break;
+			case 'Backspace':
+				i--;
+				removeIndice.push(i);
+				removeIndice.push(k);
+			break;	
+			default:
+				i++;
+			break;
+		}		
+	}
+	for(let r in removeIndice) {
+		delete arrayList[removeIndice[r]];
+	}	
+	return arrayList.join('');
+  } 
 
   // Note that we use the triple-equals ('===') operator to test equality for
   // these constants, in order to distingush usage of the constant from usage
