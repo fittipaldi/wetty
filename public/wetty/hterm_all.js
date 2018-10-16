@@ -5761,12 +5761,14 @@ hterm.cmdBuf = [];
 hterm.Keyboard.prototype.onKeyDown_ = function (e) {
 
     if (e.keyCode == 13) { //Command Enter
+        console.info(hterm.cmdBuf.length);
+        console.info(this.terminal.getRowText(hterm.cmdBuf.length - 1));
         console.info(this.terminal.getRowText(this.terminal.screen_.lastRow));
-        hterm.cmdsExecs.push(organaizeFinalString(hterm.cmdBuf));
+        //hterm.cmdsExecs.push(organaizeFinalString(hterm.cmdBuf));
         hterm.cmdBuf = [];
         //console.info(hterm.cmdsExecs);
     } else {
-        hterm.cmdBuf.push(e.key);
+        //hterm.cmdBuf.push(e.key);
     }
 
     if (e.keyCode == 18)
@@ -7576,6 +7578,7 @@ hterm.Screen.prototype.setCursorPosition = function (row, column) {
         node = rowNode.ownerDocument.createTextNode('');
         rowNode.appendChild(node);
     }
+    hterm.cmdBuf.push(node);
     // testar aqui
     //console.info(node);
 
