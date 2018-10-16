@@ -139,7 +139,7 @@ io.on('connection', function (socket) {
             rows: 30
         });
     } else if (forcessh) {
-        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport], {
+        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'StrictHostKeyChecking=no'], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
