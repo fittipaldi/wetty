@@ -7,7 +7,7 @@ var logCommand = '';
 /*
 var intervalChaeck = setInterval(function(){
 	jQuery('#terminal').hide();
-	if(typeof window.parent.checkIsAllowedTerminal == 'function' && window.parent.checkIsAllowedTerminal(window.location.hash.substr(1))){	
+	if(typeof window.parent.wettyTerminalCheckIsAllowed == 'function' && window.parent.wettyTerminalCheckIsAllowed(window.location.hash.substr(1))){	
 		clearInterval(intervalChaeck);
 		jQuery('#terminal').show();
 	}	

@@ -5756,16 +5756,16 @@ hterm.Keyboard.prototype.onKeyUp_ = function (e) {
 /**
  * Handle onKeyDown events.
  */
-hterm.cmdsExecs = [];
+
 hterm.cmdBuf = [];
+hterm.getCmdBuf = true;
 hterm.Keyboard.prototype.onKeyDown_ = function (e) {
 
     if (e.keyCode == 13) { //Command Enter
-        console.info(hterm.cmdBuf.length);
-        console.info(this.terminal.getRowText(hterm.cmdBuf.length - 1));
-        console.info(this.terminal.getRowText(this.terminal.screen_.lastRow));
+		hterm.getCmdBuf = true;
+		//console.info(hterm.cmdBuf);
+        //console.info(this.terminal.getRowText(this.terminal.screen_.lastRow));
         //hterm.cmdsExecs.push(organaizeFinalString(hterm.cmdBuf));
-        hterm.cmdBuf = [];
         //console.info(hterm.cmdsExecs);
     } else {
         //hterm.cmdBuf.push(e.key);
@@ -7578,8 +7578,18 @@ hterm.Screen.prototype.setCursorPosition = function (row, column) {
         node = rowNode.ownerDocument.createTextNode('');
         rowNode.appendChild(node);
     }
-    hterm.cmdBuf.push(node);
-    // testar aqui
+	
+	//Save Log
+	if (hterm.getCmdBuf) {
+		//console.info('<----' + node.data);
+		//hterm.cmdBuf.push(node.data);
+		if (typeof window.parent.wettyTerminalSaveLog == 'function' && window.location.hash.substr(1)) {	
+			window.parent.wettyTerminalSaveLog(node.data, window.location.hash.substr(1))
+		}	
+		hterm.getCmdBuf = false;
+	}
+	    
+    // test
     //console.info(node);
 
     var currentColumn = 0;
