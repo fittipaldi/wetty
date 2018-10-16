@@ -5761,7 +5761,7 @@ hterm.cmdBuf = [];
 hterm.Keyboard.prototype.onKeyDown_ = function (e) {
 
     if (e.keyCode == 13) { //Command Enter
-        console.info(this.terminal.getRowText(this.terminal.screen_.cursorPosition.row));
+        console.info(this.terminal.getRowText(this.terminal.screen_.lastRow));
         hterm.cmdsExecs.push(organaizeFinalString(hterm.cmdBuf));
         hterm.cmdBuf = [];
         //console.info(hterm.cmdsExecs);
