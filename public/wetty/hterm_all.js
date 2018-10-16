@@ -5761,9 +5761,10 @@ hterm.cmdBuf = [];
 hterm.Keyboard.prototype.onKeyDown_ = function (e) {
 
     if (e.keyCode == 13) { //Command Enter
+        console.info(this.terminal.getRowText(this.terminal.screen_.cursorPosition.row));
         hterm.cmdsExecs.push(organaizeFinalString(hterm.cmdBuf));
         hterm.cmdBuf = [];
-        console.info(hterm.cmdsExecs);
+        //console.info(hterm.cmdsExecs);
     } else {
         hterm.cmdBuf.push(e.key);
     }
@@ -5804,12 +5805,10 @@ hterm.Keyboard.prototype.onKeyDown_ = function (e) {
 
     function organaizeFinalString(arrayList) {
         var i = 0;
-        var insert = false;
         for (var k in arrayList) {
             switch (arrayList[k]) {
                 case 'ArrowLeft':
                     i--;
-                    insert = true;
                     delete arrayList[k];
                     break;
                 case 'Delete':
@@ -5833,14 +5832,13 @@ hterm.Keyboard.prototype.onKeyDown_ = function (e) {
                     delete arrayList[k];
                     break;
                 case 'Shift':
+                    i--;
                     delete arrayList[k];
                     break;
                 default:
-                    if (insert) {
-                        var tmp = arrayList[k];
-                        delete arrayList[k];
-                        arrayList.splice(i, 0, tmp);
-                    }
+                    var tmp = arrayList[k];
+                    delete arrayList[k];
+                    arrayList.splice(i, 0, tmp);
                     i++;
                     break;
             }
@@ -6015,7 +6013,6 @@ hterm.Keyboard.prototype.onKeyDown_ = function (e) {
             action = '\x1b' + action;
         }
     }
-
     this.terminal.onVTKeystroke(action);
 };
 // SOURCE FILE: hterm/js/hterm_keyboard_keymap.js
@@ -7560,6 +7557,8 @@ hterm.Screen.prototype.setCursorPosition = function (row, column) {
         row = 0;
     }
 
+    hterm.Screen.prototype.lastRow = row;
+
     if (column >= this.columnCount_) {
         console.error('Column out of bounds: ' + column);
         column = this.columnCount_ - 1;
@@ -7577,6 +7576,8 @@ hterm.Screen.prototype.setCursorPosition = function (row, column) {
         node = rowNode.ownerDocument.createTextNode('');
         rowNode.appendChild(node);
     }
+    // testar aqui
+    //console.info(node);
 
     var currentColumn = 0;
 
