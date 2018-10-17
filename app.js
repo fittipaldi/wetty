@@ -87,14 +87,16 @@ app.configure(function () {
     });
     app.use(app.router);
 });
-app.use('/', express.static(path.join(__dirname, 'public')));
 app.get('/user/:user', function (req, res) {
     forcessh = false;
     res.sendfile(__dirname + '/public/wetty/index.html');
 });
+app.use('/', express.static(path.join(__dirname, 'public')));
 app.get('/', function (req, res) {
     forcessh = false;
-    res.sendfile(__dirname + '/public/index.html');
+	console.log('Disable shell');
+	//res.sendfile(__dirname + '/public/index.html');
+    res.sendfile(__dirname + '/public/denied.html');
 });
 app.get('/ssh/:user/:host', function (req, res) {
     forcessh = true;
