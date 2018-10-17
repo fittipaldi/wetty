@@ -5,6 +5,7 @@ var path = require('path');
 var server = require('socket.io');
 var pty = require('pty.js');
 var fs = require('fs');
+var os = require('os');
 
 var opts = require('optimist')
     .options({
@@ -89,7 +90,8 @@ app.configure(function () {
 });
 app.get('/user/:user', function (req, res) {
     forcessh = false;
-    res.sendfile(__dirname + '/public/wetty/index.html');
+    //res.sendfile(__dirname + '/public/wetty/index.html');
+	res.sendfile(__dirname + '/public/denied.html');
 });
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.get('/', function (req, res) {
@@ -98,18 +100,41 @@ app.get('/', function (req, res) {
 	//res.sendfile(__dirname + '/public/index.html');
     res.sendfile(__dirname + '/public/denied.html');
 });
+
+
+var ifaces = os.networkInterfaces();
+var deniedHosts = ['localhost', '127.0.0.1', 'dublintty', 'dublintty.wiline.com'];
+Object.keys(ifaces).forEach(function (ifname) {
+	ifaces[ifname].forEach(function (iface) {
+		if ('IPv4' !== iface.family || iface.internal !== false) {
+		  // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+		  return;
+		}
+		deniedHosts.push(iface.address);	
+	});
+});
 app.get('/ssh/:user/:host', function (req, res) {
     forcessh = true;
     globalsshuser = req.params.user;
     sshhost = req.params.host;
-    res.sendfile(__dirname + '/public/index.html');
+	if(deniedHosts.includes(sshhost)){
+		console.log('denied');
+		res.sendfile(__dirname + '/public/denied.html');
+	}else{
+		res.sendfile(__dirname + '/public/index.html');
+	}    
 });
 app.get('/ssh/:user/:host/:port', function (req, res) {
     forcessh = true;
     sshport = req.params.port;
     globalsshuser = req.params.user;
     sshhost = req.params.host;
-    res.sendfile(__dirname + '/public/index.html');
+	if(deniedHosts.includes(sshhost)){
+		console.log('denied');
+		res.sendfile(__dirname + '/public/denied.html');
+	}else{
+		res.sendfile(__dirname + '/public/index.html');
+	}
 });
 
 if (runhttps) {
