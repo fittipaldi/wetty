@@ -1,0 +1,1280 @@
+<div id="ssh_router" style="display: none;" class="resizeable">
+	<div class="mini_popup" id="ssh_router_resizable">
+		<div onmousedown="attach_disable_scroll(true)" onmouseup="attach_disable_scroll(false)" class="mini_popup_header" style="cursor:-webkit-grab;cursor:-moz-grab;">
+			TERMINAL SSH
+			<span class="pull-right">
+			<i class="fa fa-minus-circle hoverOver hoverPopup" aria-hidden="true" id="ssh_router_minimize" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" data-content="Click to Minimize"></i>
+			<i class="icinga_up_text fa fa-plus-circle hoverOver hoverPopup" aria-hidden="true" id="ssh_router_maximize" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" data-content="Click to Maximize"></i>
+			<i class="icinga_down_text fa fa-times-circle hoverOver hoverPopup" aria-hidden="true" id="ssh_router_close" data-container="body" data-html="true" data-toggle="popover" data-placement="bottom" data-content="Click to Close"></i>
+			</span>
+		</div>
+		<hr class="hr">
+		<div class="col-lg-12 mini_popup_text_size" style="overflow-y: auto;" id="ssh_router_content"></div>
+	</div>
+</div>
+<div id="login_ssh_router" style="display: none;">
+	<div class="mini_popup" style="min-width: 350px !important;">
+		<div onmousedown="attach_disable_scroll(true)" onmouseup="attach_disable_scroll(false)" class="mini_popup_header" style="cursor:-webkit-grab;cursor:-moz-grab;">
+			LDAP CREDENTIAL
+			<span class="pull-right"><i	class="icinga_down_text fa fa-times-circle hoverOver" aria-hidden="true" id="login-ssh-router-close"></i></span>
+		</div>
+		<hr class="hr">
+		<div class="col-lg-12 mini_popup_text_size" style="overflow-y: auto;">
+			<table
+				class="table table-bordered table-hover table-condensed mini_popup_text_size table-borderless">
+				<tbody>
+					<tr>
+						<td colspan="3" class="text-left">
+							<div class="form-group">
+								<label for="ssh-router-user">USERNAME:</label> 
+								<input type="text" id="ssh-router-user" class="form-control">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="text-left">
+							<div class="form-group">
+								<label for="ssh-router-pass">PASSWORD:</label> 
+								<input type="password" id="ssh-router-pass" class="form-control">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" style="border-right:none;">
+							<div id="ssh-router-login-msg"></div> 
+						</td>
+						<td style="border-left:none;width: 30%;">
+							<i id="credential-ssh-loading" class="fa fa-spinner fa-spin pull-left hide" style="padding: 10px 0;font-size: 15px;"></i>
+							<input type="button" onclick="SshRouter.saveUserPass()" value="Save" class="btn btn-primary pull-right">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="choose_ssh_router" style="display: none;">
+	<div class="mini_popup" style="min-width: 350px !important;">
+		<div onmousedown="attach_disable_scroll(true)" onmouseup="attach_disable_scroll(false)" class="mini_popup_header" style="cursor:-webkit-grab;cursor:-moz-grab;">
+			CHOOSE ROUTER
+			<span class="pull-right"><i	class="icinga_down_text fa fa-times-circle hoverOver" aria-hidden="true" id="choose-ssh-router-close"></i></span>
+		</div>
+		<hr class="hr">
+		<div class="col-lg-12 mini_popup_text_size" style="overflow-y: auto;">
+			<table class="table table-bordered table-hover table-condensed mini_popup_text_size table-borderless">
+				<tbody id="list-of-routers"></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="commands_ssh_router" style="display: none;">
+	<div class="mini_popup">
+		<div onmousedown="attach_disable_scroll(true)" onmouseup="attach_disable_scroll(false)" class="mini_popup_header" style="cursor:-webkit-grab;cursor:-moz-grab;">
+			COMMANDS SSH ROUTER
+			<span class="pull-right"><i	class="icinga_down_text fa fa-times-circle hoverOver" aria-hidden="true" id="commands-ssh-router-close"></i></span>
+		</div>
+		<hr class="hr">
+		<div class="col-lg-12 mini_popup_text_size" style="overflow-y: auto;">
+			<table class="table table-bordered table-hover table-condensed mini_popup_text_size table-borderless">
+				<thred>
+					<tr>
+						<th width="40%">Command</th>
+						<th width="40%">Alias</th>
+						<th width="15%">Model</th>
+						<th width="5%"></th>
+					</tr>
+				</thred>
+				<tbody id="list-of-commands-ssh-router"></tbody>
+			</table>
+			<hr class="hr">
+			
+			<div class="row">
+				<div class="form-inline all-form-add">
+					<div class="form-group box-form-add">
+						<label class="lavel-form-add">Command</label>
+						<input type="text" id="ssh-router-command" class="form-control" placeholder="Command">
+				  	</div>
+				  	<div class="form-group box-form-add">
+						<label class="lavel-form-add">Alias</label>
+						<input type="text" id="ssh-router-alias" class="form-control" placeholder="Alias">
+				  	</div>
+				  	<div class="form-group box-form-add">
+						<label class="lavel-form-add">Model</label>
+						<a class="hoverOver" id="select-all-models">Select all</a>
+						<select class="form-control" id="ssh-router-models" multiple></select>
+				  	</div>
+				  	<div class="form-group box-form-add pull-right">
+				  		<i id="form-add-cmd-loading" class="fa fa-spinner fa-spin pull-left hide" style="padding: 20px 0;font-size: 16px;"></i>
+						<button type="button" onclick="CommandsSshRouter.save()" class="btn btn-primary btn-form-add">Save</button>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+<style>
+{literal}
+	.all-form-add {
+	    margin: 10px 16px;
+	}
+	.lavel-form-add {
+		float: left;
+    	position: absolute;
+   		margin-top: -14px;
+	}
+	.box-form-add {
+		margin-right: 10px;
+		padding-top: 5px;
+	}
+	.btn-form-add {
+		margin-top: 10px;
+	}
+	#ssh-router-models {
+		width: 100%;
+	}
+	#select-all-models {
+		float: right;
+		margin-top: -14px;
+	}
+	.delete-command {
+		color: #c9302c;
+	}
+	
+	.reload-terminal-tab {
+		margin-top: -33px;
+	    margin-right: 15px;
+	    float: right;
+	    font-size: 12px;
+	    color: #1c9c1c;
+	}
+	.close-terminal-tab {
+		margin-top: -33px;
+	    margin-right: -1px;
+	    float: right;
+	    font-size: 12px;
+	}
+	#ssh-router-login-msg {
+	    margin: 0;
+    	height: 34px;
+	    padding: 10px 0 0 10px;
+	}
+	#nav-terminal{
+		padding-top: 5px;
+	}
+	#nav-terminal > li > a {
+	    padding: 6px 10px;
+	}
+	.iframe {
+		overflow: hidden;
+	}
+	.shortcut-cmds {
+    	color: #333 !important;
+    }
+    .box-shortcut-cmd {
+		padding: 2px 0 5px 0;
+    }
+	
+	.btn-leftLst, .btn-rightLst { 
+		position: absolute; 
+		border-radius: 25%;
+		top: calc(50% - 12px); 
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		border: 1px solid ddd;
+	}
+    .btn-leftLst { 
+    	left: 0; 
+    }
+    .btn-rightLst { 
+    	right: 0;
+    }
+    .dowel {
+    	overflow: hidden;
+    }
+    #nav-terminal > li {
+    	width: 189px;
+    }
+    
+    .icon-letter {
+    	font-size: 8px;
+    	font-family: Arial, Helvetica, sans-serif;
+        font-weight: 700;
+        font-style: normal;
+    }
+	
+	.attention {
+		animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
+		transform: translate3d(0, 0, 0);
+		-webkit-animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
+		-webkit-transform: translate3d(0, 0, 0);
+		font-size: 10px;
+	}
+
+	@-webkit-keyframes shake {
+	  10%, 90% {
+	    -webkit-transform: translate3d(-1px, 0, 0);
+	    transform: translate3d(-1px, 0, 0);
+	    color: #ff6600;
+	  }
+	  
+	  20%, 80% {
+	  	-webkit-transform: translate3d(1px, 0, 0);
+	    transform: translate3d(1px, 0, 0);
+	    color: #d43f3a;
+	  }
+	
+	  30%, 50%, 70% {
+	    -webkit-transform: translate3d(-2px, 0, 0);
+	    transform: translate3d(-2px, 0, 0);
+	     color: #00ffff;
+	  }
+	
+	  40%, 60% {
+	    -webkit-transform: translate3d(2px, 0, 0);
+	    transform: translate3d(-2px, 0, 0);
+	    color: #5cb85c;
+	  }
+	}
+	
+	@keyframes shake {
+	  10%, 90% {
+	    transform: translate3d(-1px, 0, 0);
+	    color: #ff6600;
+	  }
+	  
+	  20%, 80% {
+	    transform: translate3d(1px, 0, 0);
+	    color: #d43f3a;
+	  }
+	
+	  30%, 50%, 70% {
+	    transform: translate3d(-2px, 0, 0);
+	     color: #00ffff;
+	  }
+	
+	  40%, 60% {
+	    transform: translate3d(2px, 0, 0);
+	    color: #5cb85c;
+	  }
+	}
+{/literal}
+</style>
+
+<script>
+{literal}
+document.domain = document.domain;
+
+//Class Terminal
+function WebTerminal(data, terminalId) {    
+	this.data = data;
+	this.terminalId = terminalId;
+	
+	this.terminalSrc = 'http://localhost:8189/ssh/';
+	//this.terminalSrc = 'http://dublintty.wiline.com:3100/ssh/'; //production
+	this.iframe = {};
+	this.iframeWindow = {};
+	this.iframeDocument = {};
+	this.router = '';
+	this.sshUser = '';
+	this.sshPass = '';
+	this.listCmdToExec = [];
+	this.isActive = false;
+	this.isLoadIframe = false;
+	this.aliasCommands = [];
+	
+	this.setRouter = function(router){
+		this.router = router;
+	}
+	
+	this.setSshUser = function(user){
+		this.sshUser = user;
+	}
+	
+	this.setSshPass = function(pass){
+		this.sshPass = pass;
+	}
+	
+	this.create = function(router, user, pass){
+		if((typeof router != 'undefined') && router){
+			this.setRouter(router);
+		}
+		if((typeof user != 'undefined') && user){
+			this.setSshUser(user);
+		}
+		if((typeof pass != 'undefined') && pass){
+			this.setSshPass(pass);
+		}
+		
+		this.connect();
+		this.createSession();
+	}
+	
+	this.connect = function(){
+		if(this.router && this.sshUser && this.sshPass){
+			let widthFrame = $('#web-terminal-' + this.terminalId).parent().width();
+			let heightFrame = $('#ssh_router_resizable').height() - 120;
+			$('#web-terminal-' + this.terminalId).attr('src', this.terminalSrc + this.sshUser + '/' + this.router + '/#' + this.terminalId).css('width', widthFrame + 'px').css('height', heightFrame + 'px');
+			this.iframe = document.getElementById('web-terminal-' + this.terminalId);
+			this.iframeWindow = this.iframe.contentWindow;
+			this.iframeDocument = this.iframe.contentDocument;
+			
+			var self = this;
+			$('#web-terminal-' + this.terminalId).load(function(){
+				self.load();
+				self.listCmdToExec.push(window.atob(self.sshPass));
+			});
+			$('#terminal-router-' + this.terminalId).html(' - ' + this.router);
+			$('a[href=#terminal-' + this.terminalId + ']').addClass('text-success');
+			$('a[href=#terminal-' + this.terminalId + ']').click(function(e){
+				SshRouter.iframeResize();
+			});
+			this.isActive = true;
+			Dowel.calculateCarouselSize();
+			
+			this.getAliasCommands();
+		}
+	}
+	
+	this.reload = function(){
+		this.iframeWindow.location.reload(true);
+	}
+	
+	this.close = function(closeSession){
+		if(this.isActive && this.isLoadIframe){
+			this.iframeWindow.socket.emit('disconnect');
+		}
+		if(typeof closeSession == 'undefined'){
+			closeSession = true;
+		}
+		if(closeSession){
+			this.closeSession();
+		}
+		$('#terminal-' + this.terminalId).remove();
+		$('a[href="#terminal-' + this.terminalId + '"]').parent().remove();
+		if($('#nav-terminal').find('li').length == 0){
+			SshRouter.justCloseModal();
+		}
+	}
+	
+	this.getAliasCommands = function(){
+		var self = this;
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=get_router_commands',
+		{'model': this.terminalId.substr(-7,5)}, function(data) {
+			for(let k in data.commands){
+				let tmp = {
+					'command': data.commands[k].command,
+					'alias': data.commands[k].alias
+				};
+				self.aliasCommands.push(tmp);
+			}
+		},'json').always(function(){
+			self.showAliasCommands();
+		});
+	}
+	
+	this.showAliasCommands = function(){
+		for(let k in this.aliasCommands){
+			$('#alias-cmd-terminal-' + this.terminalId).append('<div class="col-md-6 box-shortcut-cmd"><button type="button" class="btn btn-info run-command" data-terminal-id="' + this.terminalId + '" data-command="' + this.aliasCommands[k].command + '">' + this.aliasCommands[k].alias + '</button></div>');
+		}
+	}
+	
+	this.closeSession = function(){
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=delete_session_terminal',
+		{'terminal_id': this.terminalId, 'browser_id': SshRouter.sessionBrowserId()}, function(data) {},'json').always(function(){});
+	}
+	
+	this.createSession = function(){
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=save_session_terminal',
+		{'router': this.router, 'terminal_id': this.terminalId, 'ssh_user': this.sshUser, 'ssh_pass': this.sshPass, 'data': this.data, 'browser_id': SshRouter.sessionBrowserId()},
+		function(data) {},'json').always(function(){});
+	}
+	
+	this.runListCmd = function(){
+		if(this.listCmdToExec.length > 0){
+			for (let key in this.listCmdToExec) {
+				this.execCommand(this.listCmdToExec[key] + '\n');
+			    this.listCmdToExec.splice(key, 1);
+			    return;
+			}
+		}
+	}
+
+	this.load = function(){
+		var self = this;
+		this.isLoadIframe = true;
+		this.iframeWindow.socket.on('output', function (data) {
+			self.runListCmd(data);
+		});
+	}
+	
+	this.terminalSaveLog = function(log){
+		log = log.trim().replace(this.router + '>', '').replace(this.router + '#', '');
+		if(log){
+			var self = this;
+			SshRouter.loading.start(this.terminalId);
+			$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=log&bid=' + this.data.ID,
+			{'router': this.router, 'log': log},
+			function(data) {},'json').always(function(){SshRouter.loading.stop(self.terminalId);});
+		}
+	}
+	
+	this.execCommand = function(cmd, saveLog){
+		if(cmd){
+			this.iframeWindow.socket.emit('input', cmd);
+		}
+		if(typeof saveLog != 'undefined' && saveLog){
+			this.terminalSaveLog(cmd);
+		}
+	}
+	
+}
+
+var SshRouter = {
+		
+	data: {},
+	boxTerminal: '#box-terminal',
+	navTerminal: '#nav-terminal',
+	termianlActives: {},
+	windowPopupIsOpen: false,
+	bidAllowed: [],
+	sshUser: '',
+	sshPass: '',
+	modalMaxHeight: 0,
+	modalMaxWidth: 0,
+	brwoserId: 0,
+	isLoadedTerminalSession: false,
+	countTerminalActive: 0,
+	
+	htmlLinkTab: `
+		<li>
+			<a data-toggle="tab" href="#terminal-%s">
+				<i id="ssh-loading-%s" class="fa fa-spinner fa-spin hide"></i>
+				%n<span id="terminal-router-%s"></span>
+			</a>
+			<i onclick="SshRouter.termialReload('%s')" class="fa fa-refresh reload-terminal-tab hoverOver" aria-hidden="true" title="Reload Terminal"></i>
+			<i onclick="SshRouter.closeTermialTab('%s')" class="fa fa-times-circle close-terminal-tab hoverOver" aria-hidden="true" title="Close Terminal"></i>
+		</li>
+	`,
+	
+	htmlTerminal: `
+		<div id="terminal-%s" class="tab-pane fade">
+			<div class="alert hide" id="terminal-msg-%s">
+				<i class="fa fa-times close-alert-terminal hoverOver pull-right" data-terminal-id="%s"></i> 
+				<div class="content"></div>
+			</div>
+			<div class="row loading">
+				<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div class="showbox">
+						<div class="showbox-content">
+							<h3 class="lead-head"><i class="fa fa-spinner fa-spin"></i>Connecting to the device...</h3>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row iframe hide">
+				<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 box-iframe">
+					<iframe id="web-terminal-%s"></iframe>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+					<h4 class="text-center shortcut-cmds">Commands Shortcut</h4>
+					<hr class="hr"/>
+					<div class="row" id="alias-cmd-terminal-%s"></div>
+				</div>
+			</div>
+		</div>
+	`,
+	
+	htmlModal: `
+		<div style="height: 100%; overflow: auto;">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<button data-direction="-1" class="btn btn-default btn-leftLst hide"><</button>
+						<div role="navigation" class="dowel">
+							<ul class="nav nav-tabs" id="nav-terminal"></ul>
+						</div>
+						<button data-direction="1" class="btn btn-default btn-rightLst hide">></button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="tab-content" id="box-terminal"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	`,
+	
+	init: function(data){
+		this.data = data;
+		if(!this.data.ID){
+			alert('Not Information!');
+			return false;
+		}
+		this.openModalRouter();
+		this.sessionBrowserId();
+		var self = this;
+		$('.close-alert-terminal').on('click', function(e){
+			e.preventDefault();
+			self.alertTerminal.close($(this).attr('data-terminal-id'));
+		});
+	},
+	
+	sessionBrowserId: function(){
+		let key = 'brwoser_tab_id';
+		this.brwoserId = parseInt(sessionStorage.getItem(key));
+		if(!this.brwoserId){
+			this.brwoserId = new Date().getTime();
+			sessionStorage.setItem(key, this.brwoserId);
+		}
+		return this.brwoserId;
+	},
+	
+	saveUserPass: function(){
+		var self = this;
+		this.sshUser = $('#ssh-router-user').val();
+		this.sshPass = $('#ssh-router-pass').val();
+		$('#credential-ssh-loading').removeClass('hide');
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=user_pass',
+		{'username': this.sshUser, 'password': this.sshPass}, function(data) {
+			if(data.status){
+				$('#ssh-router-login-msg').removeClass (function (index, className) {
+				    return (className.match (/(^|\s)alert-\S+/g) || []).join(' ');
+				}).addClass('alert alert-success').html(data.msg).show();
+				self.verifiLdapCredential();
+				self.closePopupLdapCredential(3500);
+			}else{
+				$('#credential-ssh-loading').addClass('hide');
+			}
+		},'json').always(function(){
+			
+		});
+	},
+	
+	openModalRouter: function(){
+		$('#choose_ssh_router').css('position', 'absolute');
+		$('#choose_ssh_router').css('top', '100px');
+		$('#choose_ssh_router').css('left', '100px');
+		$('#choose_ssh_router').draggable({
+			containment: 'window',
+			start: function (event) {
+				if (!contractScroll) {
+					$(this).trigger('mouseup');
+					return false;
+				}
+			},
+			stop: function (event) {
+				contractScroll = false;
+			}
+		});
+		$('#choose_ssh_router').show();
+		this.getDevices();
+	},
+	
+	createAbaTerminal: function(router){
+		if(!this.windowPopupIsOpen){
+			this.openModal();
+		}else{
+			this.showModal();
+		}
+		this.getTerminal(router);
+	},
+	
+	showIconTerminalActives: function(force){
+		if(typeof force != 'undefined' && force){
+			$('#icon-terminal-ssh-router').removeClass('hide');
+		}else{
+			if(Object.keys(this.termianlActives).length > 0){
+				$('#icon-terminal-ssh-router').removeClass('hide');
+			}
+		}
+	},
+	
+	setCountTerminalActive: function(num){
+		this.countTerminalActive = parseInt(num);
+		let dataParam = ['data-original-title'];
+		let tmp = '';
+		for(let i in dataParam){
+			tmp = $('#icon-terminal-ssh-router').attr(dataParam[i] + '-o');
+			if(!tmp){
+				tmp = $('#icon-terminal-ssh-router').attr(dataParam[i]);
+				$('#icon-terminal-ssh-router').attr(dataParam[i] + '-o', tmp);
+			}
+			$('#icon-terminal-ssh-router').attr(dataParam[i], tmp + ' (' + this.countTerminalActive + ')');
+		}
+	},
+	
+	loadTerminalSession: function(){
+		if(!this.isLoadedTerminalSession){
+			var self = this;
+			let toOpen = true;
+			this.isLoadedTerminalSession = true;
+			$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=get_session_terminal', 
+				{'browser_id': SshRouter.sessionBrowserId()}, function(data) {
+				for(let k in data.termianls){
+					if(toOpen){
+						self.openModal(true);
+						toOpen = false;
+					}
+					let itm = data.termianls[k];
+					self.getTerminal(k, itm.data, itm.ssh_user, window.atob(itm.ssh_pass));
+				}
+			},'json').always(function(){
+				if(!toOpen){
+					$('#nav-terminal').find('li:first').find('a').click();
+				}
+			});
+		}
+	},
+	
+	getTerminal: function(router, data, user, pass){
+		let toClcik = true;
+		if(typeof data == 'object') {
+			toClcik = false;
+			this.data = data;
+		}
+		if(typeof user == 'undefined') {
+			user = '';
+		}
+		if(typeof pass == 'undefined') {
+			pass = '';
+		}
+		
+		if(typeof this.termianlActives[router] == 'undefined') {
+			this.bidAllowed.push(router);
+			$(this.boxTerminal).append(this.htmlTerminal.replace(new RegExp('%s', 'g'), router));
+			$(this.navTerminal).append(this.htmlLinkTab.replace(new RegExp('%s', 'g'), router).replace(new RegExp('%n', 'g'), this.data.name));
+			this.setCountTerminalActive(this.countTerminalActive + 1);
+			Dowel.calculateCarouselSize();
+			if(toClcik){
+				$('a[href="#terminal-' + router + '"]').click();
+			}
+			this.termianlActives[router] = new WebTerminal(this.data, router);
+			this.sendDoLogin(router, router, user, pass);
+		}
+	},
+
+	getDevices: function(){
+		var self = this;
+		$('#list-of-routers').html('<tr><td><i class="fa fa-spinner fa-spin"></i>Loading...</td></tr>');
+		$.getJSON('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&device_info_by_bid=1&bid=' + this.data.ID, function(data) {
+			if(data.length == 1){
+				SshRouter.closeModalRouters();
+				self.createAbaTerminal(data[0].device);
+			}else{
+				$('#list-of-routers').html('');
+				$.each(data, function(k,el){
+					$('#list-of-routers').append('<tr><td class="hoverOver open-terminal-router" data-device="' + el.device + '">' + el.device + ' : ' + el.deviceip + '<i class="fa fa-sign-out pull-right" aria-hidden="true"></i></td></tr>');
+				});
+			}
+		}).fail(function( jqxhr, textStatus, error ) {
+		    var err = textStatus + ', ' + error;
+		    alert('Request Failed: ' + err);
+		    window.location.reload();
+		});
+	},
+	
+	openModal: function(minimized){
+		var self = this;
+		this.modalMaxHeight = window.screen.availHeight - 120;
+		this.modalMaxWidth = window.screen.availWidth - 40;
+		$('#ssh_router_content').html(this.htmlModal);
+		this.maximizeModal();
+		$('#ssh_router').css('position', 'absolute');
+		$('#ssh_router').css('top', '10px');
+		$('#ssh_router').css('left', (10 - $('.lmap-sidebar').width()) + 'px');
+		$('#ssh_router').draggable({
+			containment: 'window',
+			start: function (event) {
+				if (!contractScroll) {
+					$(this).trigger('mouseup');
+					return false;
+				}
+			},
+			stop: function (event) {
+				contractScroll = false;
+			}
+		});
+		$('#ssh_router_resizable').resizable({
+			maxHeight: this.modalMaxHeight,
+			maxWidth: this.modalMaxWidth,
+			minHeight: (this.modalMaxHeight/2),
+			minWidth: (this.modalMaxWidth/3),
+			start: function (event, ui) {
+			},
+			stop: function (event, ui) {
+				$('#ssh_router').css('width', ui.size.width + 'px').css('height', ui.size.height + 'px')
+				self.iframeResize((ui.size.height - 100));
+			},
+			resize: function(event, ui) {
+				self.iframeResize((ui.size.height - 100));
+			}
+		});
+		if(typeof minimized == 'undefined' && !minimized){
+			this.showModal();
+		}else{
+			this.showIconTerminalActives(true);
+		}
+		this.windowPopupIsOpen = true;
+		Dowel.init();
+	},
+	
+	termialReload: function(terminalId){
+		if(typeof this.termianlActives[terminalId] == 'object') {
+			this.termianlActives[terminalId].reload();
+		}
+	},
+	
+	loading: {
+		start: function(terminalId){
+			$('#ssh-loading-' + terminalId).removeClass('hide');
+			$('#ssh_router').find('button').attr('disabled','disabled');
+		},
+		stop: function(terminalId){
+			$('#ssh-loading-' + terminalId).addClass('hide');
+			$('#ssh_router').find('button').removeAttr('disabled','disabled');
+		}
+	},
+	
+	doLogin: function(terminalId){
+		var self = this;
+		let router = $('#routers-list-' + terminalId).val();
+		let username = $('#username-' + terminalId).val();
+		let password = $('#password-' + terminalId).val();
+		
+		if(!router){
+			this.alertTerminal.open(terminalId, 'Select any Router', 'warning');
+			return false;
+		}
+		if(!username && $('#username-' + terminalId).is(':visible')){
+			this.alertTerminal.open(terminalId, 'Put the Username', 'warning');
+			return false;
+		}
+		if(!password && $('#password-' + terminalId).is(':visible')){
+			this.alertTerminal.open(terminalId, 'Put the Password', 'warning');
+			return false;
+		}
+		
+		this.sendDoLogin(terminalId, router, username, password);
+	},
+	
+	sendDoLogin: function(terminalId, router, username, password){
+		var self = this;
+		if(typeof router == 'undefined' || !router){
+			router = terminalId;
+		}
+		this.loading.start(terminalId);
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1',
+		{'router': router, 'username': username, 'password': password}, function(data) {
+			if(data.login) {
+				if(typeof self.termianlActives[terminalId] != 'undefined'){
+					$('#terminal-' + terminalId).find('.loading').addClass('hide');
+					$('#terminal-' + terminalId).find('.iframe').removeClass('hide');
+					self.termianlActives[terminalId].create(data.ssh_data.host, data.ssh_data.user, data.ssh_data.pass);
+				}
+			}else{
+				self.termianlActives[terminalId].close();
+				delete self.termianlActives[terminalId];
+				$('#ssh-router-login-msg').removeClass (function (index, className) {
+				    return (className.match (/(^|\s)alert-\S+/g) || []).join(' ');
+				}).addClass('alert alert-warning').html(data.log_message).show();
+				self.openPopupLdapCredential();
+			}
+		}, 'json').always(function(){
+			self.loading.stop(terminalId);
+		});
+	},
+	
+	closeTermialTab: function(terminalId){
+		if(confirm('Are you sure?')){
+			this.setCountTerminalActive(this.countTerminalActive - 1);
+			this.termianlActives[terminalId].close();
+			delete this.termianlActives[terminalId];
+		}
+	},
+	
+	closeTerminalActives: function(){
+		for(let i in this.termianlActives){
+			if(this.termianlActives[i].isActive){
+				this.termianlActives[i].close(false);
+				delete this.termianlActives[i];
+			}else{
+				delete this.termianlActives[i];
+			}
+		}
+		this.setCountTerminalActive(0);
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=delete_all_session_terminal',
+		{'terminal_id': this.terminalId}, function(data) {},'json').always(function(){});
+	},
+	
+	alertTerminal:{
+		open: function(terminalId, msg, type){
+			//warning, info, success, danger
+			type = (typeof type != 'undefined' && type) ? 'alert-'+type : 'alert-info';
+			$('#terminal-msg-' + terminalId).addClass(type).find('.content').html(msg);
+			$('#terminal-msg-' + terminalId).removeClass('hide');
+		},
+		close: function(terminalId){
+			$('#terminal-msg-' + terminalId).addClass('hide');
+		}
+	},
+	
+	closeModalRouters: function(){
+		$('#choose_ssh_router').hide();
+	},
+	
+	checkLdapCredential: function(){
+		var self = this;
+		$('#credential-ssh-loading').removeClass('hide');
+		$.getJSON('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=get_user_pass', function(data) {
+			self.sshUser = data.username;
+			self.sshPass = data.password;
+			self.verifiLdapCredential();
+			$('#credential-ssh-loading').addClass('hide');
+		}).fail(function( jqxhr, textStatus, error ) {
+		    var err = textStatus + ', ' + error;
+		    alert('Request Failed: ' + err);
+		    window.location.reload();
+		});
+	},
+	
+	verifiLdapCredential: function(){
+		$('#ssh-router-user').val(this.sshUser);
+		$('#ssh-router-pass').val(this.sshPass);
+		if(this.sshUser && this.sshPass){
+			$('#login-ssh-router').removeClass('text-danger');
+			$('#login-ssh-router').addClass('text-success');
+		}else{
+			$('#login-ssh-router').removeClass('text-success');
+			$('#login-ssh-router').addClass('text-danger');
+		}
+	},
+	
+	openPopupLdapCredential: function(){
+		$('#login_ssh_router').show();
+		$("#login_ssh_router").css('position', 'absolute');
+		$("#login_ssh_router").css('top', '150px');
+		$("#login_ssh_router").css('left', '50px');
+		$("#login_ssh_router").draggable({
+			containment: 'window',
+			start: function (event) {
+				if (!contractScroll) {
+					$(this).trigger('mouseup');
+					return false;
+				}
+			},
+			stop: function (event) {
+				contractScroll = false;
+			}
+		});
+	},
+	
+	closePopupLdapCredential: function(delay){
+		if(typeof delay == 'undefined' || !delay){
+			delay = 0;
+		}
+		setTimeout(function(){
+			$('#ssh-router-login-msg').empty().hide();
+			$('#login_ssh_router').hide();
+			$('#credential-ssh-loading').addClass('hide');
+		}, delay);
+	},
+	
+	closeModal: function(){
+		if(confirm('You will close all Termianls! Are you sure?')) {
+			this.setCountTerminalActive(0);
+			this.closeTerminalActives();
+			this.justCloseModal();
+		}
+	},
+	
+	justCloseModal: function(){
+		$('#ssh_router').hide();
+		this.windowPopupIsOpen = false;
+		$('#ssh_router_content').empty();
+	},
+	
+	hideModal: function(){
+		this.showIconTerminalActives();
+		$('#ssh_router').animate({
+			width: 5, 
+			height: 5
+		}, 500, function(){
+			$(this).hide();
+		});
+	},
+	
+	showModal: function(){
+		$('#icon-terminal-ssh-router').addClass('hide');
+		this.maximizeModal();
+		this.iframeResize(this.modalMaxHeight - 120, this.modalMaxWidth - 525);
+		$('#ssh_router').css('left', (10 - $('.lmap-sidebar').width()) + 'px').css('top', '10px') .show();
+	},
+	
+	iframeResize: function(height, width) {
+		if($('iframe[id*="web-terminal-"]').length > 0){
+			if(typeof height == 'undefined' && !height){
+				height = $('div[id*="terminal-"].active').find('.box-iframe').height();
+				height = (height < 400) ? 400 : height;
+			}
+			if(typeof width == 'undefined' && !width){
+				width = $('div[id*="terminal-"].active').find('.box-iframe').width();
+				width = (width < 400) ? 400 : width;
+			}
+			$('iframe[id*="web-terminal-"]').css('width', width + 'px').css('height', height + 'px');
+		}
+	},
+	
+	maximizeModal: function(){
+		$('#ssh_router_resizable').attr('style', 'width:' + this.modalMaxWidth + 'px;height:' + this.modalMaxHeight + 'px;');
+	},
+	
+	htmlLogTerminal: `
+		<div class="mini_popup_fs container-fluid">
+		    <div onmousedown="attach_disable_scroll(true)" onmouseup="attach_disable_scroll(false)" class="mini_popup_header">
+				SSH ROUTER LOGS
+				<span class="pull-right"><i onclick="close_radio_reboot_log_popup()" class="hoverOver icinga_down_text fa fa-times-circle" aria-hidden="true"></i></span>
+		    </div>
+		    <hr class="hr">
+		    <div>
+		    	<table class="table table-bordered table-condensed">
+					<thead>
+						<tr>
+							<th class="text-center">BID</th>
+							<th class="text-center">Command</th>
+							<th class="text-center">Router</th>
+							<th class="text-center">Modify Date(PST)</th>
+							<th class="text-center">Modify User</th>
+						</tr>
+					</thead>
+					<tbody id="rr_logs_data"></tbody>
+				</table>
+		    </div>
+		    <div>
+			    <div class="text-center">
+					<input type="button" value="Close" class="btn btn-info" onclick="close_radio_reboot_log_popup()">
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	`,
+	
+	showLogTerminal: function(){
+		$("#radio_reboot_popup_logs").removeClass('hide');
+		$("#radio_reboot_popup_logs").empty();
+		$("#radio_reboot_popup_logs").append(this.htmlLogTerminal);
+		$("#radio_reboot_popup_logs").css('position', 'absolute');
+		$.getJSON('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=get_router_logs', function(data) {
+			var htmlTooltip = '';
+			for(var k in data.logs) {
+				htmlTooltip += "<tr>";
+				htmlTooltip += "<td class='text-center'>"+data.logs[k].bid+"<\/td>";
+				htmlTooltip += "<td class='text-center'>"+data.logs[k].command+"<\/td>";
+				htmlTooltip += "<td class='text-center'>"+data.logs[k].router+"<\/td>";
+				htmlTooltip += "<td class='text-center'>"+data.logs[k].date_created+"<\/td>";
+				htmlTooltip += "<td class='text-center'>"+data.logs[k].name+"<\/td>";
+				htmlTooltip += "</tr>";	
+			}
+			$("#rr_logs_data").html(htmlTooltip);
+		});
+	}
+	
+};
+
+function wettyTerminalCheckIsAllowed(terminalId){
+	return ($.inArray(terminalId, SshRouter.bidAllowed) >= 0)
+}
+
+function wettyTerminalSaveLog(log, terminalId){
+	if(typeof SshRouter.termianlActives[terminalId] != 'undefined' && log && log.trim() != '--More--'){
+		SshRouter.termianlActives[terminalId].terminalSaveLog(log);
+	}
+}
+
+var CommandsSshRouter = {
+	
+	init: function(){
+		$('#commands_ssh_router').show();
+		$("#commands_ssh_router").css('position', 'absolute');
+		$("#commands_ssh_router").css('top', '30px');
+		$("#commands_ssh_router").css('left', '30px');
+		$("#commands_ssh_router").draggable({
+			containment: 'window',
+			start: function (event) {
+				if (!contractScroll) {
+					$(this).trigger('mouseup');
+					return false;
+				}
+			},
+			stop: function (event) {
+				contractScroll = false;
+			}
+		});
+		this.getCommandsSave();
+		this.getModelRouter();
+	},
+	
+	getCommandsSave: function(){
+		$('#list-of-commands-ssh-router').html('<tr><td class="text-center" colspan="8"><i class="fa fa-spinner fa-spin"></i>Loading...</td></tr>');
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=get_router_commands', function(data) {
+			$('#list-of-commands-ssh-router').html('');
+			for(let k in data.commands){
+				$('#list-of-commands-ssh-router').append('<tr id="command-line-' + data.commands[k].id + '">' +
+					'<td>' + data.commands[k].command + '</td>' +
+					'<td>' + data.commands[k].alias + '</td>' +
+					'<td>' + data.commands[k].models.substr(0, 17).replace(new RegExp(',', 'g'), ', ') + ((data.commands[k].models.length > 17) ? ' <i class="fa fa-ellipsis-h hoverOver" aria-hidden="true" title="' + data.commands[k].models.replace(new RegExp(',', 'g'), ', ') + '"></i>' : '' ) + '</td>' +
+					'<td class="text-center"><i class="fa fa-trash hoverOver delete-command" aria-hidden="true" data-id="' + data.commands[k].id + '" title="Delete"></i></td>' +
+				'</tr>');
+			}		
+		},'json').always(function(){
+		});
+	},
+	
+	getModelRouter: function(){
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=get_router_models', function(data) {
+			$('#ssh-router-models').html('');
+			for(let k in data.models){
+				$('#ssh-router-models').append('<option value="' + data.models[k].subtype + '">' + data.models[k].subtype + '</select>');	
+			}		
+		},'json').always(function(){
+		});
+	},
+	
+	save: function(){
+		var self = this;
+		let command = $('#ssh-router-command').val();
+		let alias = $('#ssh-router-alias').val();
+		let models = [];
+		$.each($('#ssh-router-models').find('option:selected'), function(k, el){
+			models.push($(el).val());
+		});
+		if(!command){
+			alert('Put the command');
+			return false;
+		}
+		if(!alias){
+			alert('Put the alias');
+			return false;
+		}	
+		if(models.length == 0){
+			alert('Select in the minimal 1 model');
+			return false;
+		}		
+		$('#form-add-cmd-loading').removeClass('hide');
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=save_router_command',
+		{'command': command, 'alias': alias, 'models': models},	function(data) {
+			self.getCommandsSave();
+		},'json').always(function(){
+			$('#form-add-cmd-loading').addClass('hide');
+		});
+	},
+	
+	deleteCommand: function(id, elem){
+		$('#command-line-' + id).css('background-color', '#f7c0be');
+		$.post('modules.php?action=LogicalNodeMap&logicalnodemap=1&notheme=1&ssh_router=1&type=delete_router_command',
+		{'id': id},	function(data) {
+			console.info(data);
+			if(data.status){
+				$('#command-line-' + id).animate({'opacity': '0.1'}, function(){
+					$(this).remove();
+				});
+			}
+		},'json').always(function(){
+		});
+	},
+	
+	closeModal: function(){
+		$('#commands_ssh_router').hide();
+	}
+	
+};
+
+var Dowel = {
+	
+	marginRight: 5,
+	elemItems: {},
+	sizeEachItems: [],
+	countItems: 0,
+	translateXval: 0,
+	currentKey: 0,
+	fixedItems: 8,
+	isInitialize: false,
+	
+	init: function() {
+		if(!this.isInitialize){
+			var self = this;
+			this.isInitialize = true;
+			this.readItems();
+			$('#nav-terminal').find('li').css('margin-right', this.marginRight + 'px');
+			
+			$('.btn-leftLst, .btn-rightLst').click(function () {
+				let direction = $(this).data('direction');
+				self.moveCarousel(direction);
+			});
+			
+			this.calculateCarouselSize();
+		}
+	},
+	
+	totalSum: function(total, num) { 
+		return total + num;
+	},
+	
+	readItems: function(){
+		this.elemItems = $('#nav-terminal').find('li');
+	},
+	
+	manegerBtns: function(){
+		this.readItems();
+		this.countItems = this.elemItems.length;
+		if(this.countItems > this.fixedItems){
+			$('.btn-leftLst, .btn-rightLst').removeClass('hide');
+			$('.dowel').css('width', '98%').css('margin-left', '1%');
+		}else{
+			$('.btn-leftLst, .btn-rightLst').addClass('hide');
+			$('.dowel').css('width', '100%').css('margin-left', '0');
+		}
+	},
+	
+	calculateCarouselSize: function () {
+		var self = this;
+		if(!this.isInitialize){
+			this.init();
+		}
+		this.manegerBtns();
+		if(this.countItems > 0){
+			$.each(this.elemItems, function (k, el) {
+	        	self.sizeEachItems.push($(el).width() + self.marginRight);
+	        });
+			let width = this.sizeEachItems.reduce(this.totalSum);
+			if(width < (window.screen.width - 60)){
+				width = (window.screen.width - 60);
+			}
+	        $('#nav-terminal').css({ 'transform': 'translateX(' + this.translateXval + 'px)', 'width': width + 'px'});
+		}
+    },
+	
+    moveCarousel: function (direction) {
+    	this.currentKey = this.currentKey + direction;
+    	let move = true;
+    	let max = (this.countItems - this.fixedItems);
+    	console.info(max);
+    	console.info(this.currentKey);
+    	
+    	if(this.currentKey < 0){
+    		this.currentKey = 0;
+    		move = false;
+    	}else{
+    		if(this.currentKey >= max){
+    			this.currentKey = max - 1;
+    			move = false;
+    		}else if(this.currentKey > this.countItems){
+	    		this.currentKey = this.countItems;
+	    		move = false;
+		    }
+    	}
+    	
+    	if(move){
+			if(direction > 0){
+				this.translateXval = this.translateXval + (this.sizeEachItems[this.currentKey]);
+	    	}else{
+	    		this.translateXval = this.translateXval - (this.sizeEachItems[this.currentKey]);
+	    	}
+    	}
+		$('#nav-terminal').css('transform', 'translateX(' + -this.translateXval + 'px)');
+    }
+	
+};
+
+
+$(function(){
+	SshRouter.checkLdapCredential();
+	
+	$(document).on('click', '.run-command', function(e){
+		e.preventDefault();
+		let terminalId = $(this).data('terminal-id');
+		let command = $(this).data('command');
+		if(typeof SshRouter.termianlActives[terminalId] == 'object'){
+			SshRouter.termianlActives[terminalId].execCommand(command + '\n', true);
+		}
+	});
+	
+	$('#select-all-models').on('click', function(e){
+		e.preventDefault();
+		let status = $(this).data('status');
+		if(typeof status == 'undefined' || status == 0){
+			$(this).data('status', 1);
+			$('#ssh-router-models').find('option').prop('selected', true);
+		}else{
+			$(this).data('status', 0);
+			$('#ssh-router-models').find('option').prop('selected', false);
+		}
+	});
+	
+	$(document).on('click', '.delete-command', function(e){
+		e.preventDefault();
+		CommandsSshRouter.deleteCommand($(this).data('id'))
+	});
+	
+	$('#login-ssh-router').on('click', function(e){
+		e.preventDefault();
+		SshRouter.openPopupLdapCredential();
+	});
+	
+	$('#login-ssh-router-close').on('click', function(e){
+		e.preventDefault();
+		SshRouter.closePopupLdapCredential();
+	});
+	
+	$('#ssh_router_close').on('click', function(e){
+		e.preventDefault();
+		SshRouter.closeModal();
+	});
+	
+	$('#ssh_router_minimize').on('click', function(e){
+		e.preventDefault();
+		SshRouter.hideModal();
+	});
+	
+	$('#ssh_router_maximize').on('click', function(e){
+		e.preventDefault();
+		SshRouter.maximizeModal();
+	});
+	
+	$('#icon-terminal-ssh-router').on('click', function(e){
+		e.preventDefault();
+		SshRouter.showModal();
+	});
+	
+	$('#choose-ssh-router-close').on('click', function(e){
+		e.preventDefault();
+		SshRouter.closeModalRouters();
+	});
+	
+	$('#icon-commands-ssh-router').on('click', function(e){
+		e.preventDefault();
+		CommandsSshRouter.init();
+	});
+	
+	$('#commands-ssh-router-close').on('click', function(e){
+		e.preventDefault();
+		CommandsSshRouter.closeModal();
+	});
+	
+	$(document).on('click', '.open-terminal-router', function(e){
+		e.preventDefault();
+		SshRouter.createAbaTerminal($(this).data('device'));
+	})
+	
+	$('#log-ssh-router').on('click', function(e){
+		e.preventDefault();
+		SshRouter.showLogTerminal();
+	});
+	
+});
+
+{/literal}
+</script>
