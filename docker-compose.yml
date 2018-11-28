@@ -1,0 +1,7 @@
+version: "3"
+services:
+  node:
+    image: krishnasrinivas/wetty
+    volumes:
+        - .:/var/www/node
+ 
